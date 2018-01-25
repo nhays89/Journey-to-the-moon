@@ -4,11 +4,69 @@
 #include <unordered_map>
 #include <unordered_set>
 using namespace std;
+/*
+A group is a related set of astronauts that are from 
+the same country of origin. 
+An astronaut may have a direct parent group, and then
+later be merged with another known group that is from the
+same country of origin with a new root group. It will retain
+the original parent group. 
 
+For instance, example input:
+53 
+01
+23
+12
+
+The astronauts, 0 and 1, are added to the map under the same group, A. 
+
+ A
+/ \
+0  1
+
+Astronauts 2 and 3, are added the map under the same group, B.
+
+ A
+/ \
+0  1
+ B
+/ \
+2  3
+
+Astronauts 1 and 2 already exist, but each belongs to a different 'root' group, namely A and B.
+So, a new group, C, is created, and both A and B point to the new root group C.
+ 
+    C
+  /   \
+ A     B
+/ \   / \
+0  1 2   3
+
+*/
 typedef struct group {
 	long size;
 	struct group *parent;
 } Group;
+
+/*
+@total_astros - the total number of astronauts for the sample case.
+@pairs - input list of astronaut pairs.
+@return - an integer denoting the total number of pairwise combinations of astronauts belonging to different countries.
+
+Traverses through a list of pairs of astronauts known to belong to the same country. Using
+transitive reduction via common root groups, groups of astronauts are formed and merged 
+building larger groups to represent the growing number of astronauts for each country.
+Each astronaut can belong to many parent groups, but only one of which is the root parent group.
+The root of which is the country origin for that astronaut.
+
+An unordered_map stores data about each astronauts group(s), and an unordered_set stores data
+on all root groups. Once all groups are created, the set will be iterated over to access the count 
+of each root group.A sum of all pairwise combinations of counts is then calculated for known groups 
+follwed by a sum of all pairwise combinations of unknown groups. 
+These totals are added and returned.
+
+
+*/
 
 int comp(long total_astros, vector<vector<long>> pairs) {
 
@@ -106,6 +164,20 @@ int comp(long total_astros, vector<vector<long>> pairs) {
 
 	return num_of_combinations;
 }
+
+/*
+
+Example input:
+53 
+01
+23
+12
+
+where:
+5 is total number of astronauts
+3 is the number of pairs of astronauts listed below on seperate lines.
+
+*/
 
 int main() {
 	long n, p;
