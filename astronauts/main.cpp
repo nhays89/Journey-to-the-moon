@@ -5,21 +5,18 @@
 #include <unordered_set>
 using namespace std;
 
-class Group {
-public:
-	int size;
-	Group *parent;
-};
+typedef struct group {
+	long size;
+	struct group *parent;
+} Group;
 
-const int s = 1;
-
-int comp(int total_astros, vector<vector<int>> pairs) {
+int comp(long total_astros, vector<vector<long>> pairs) {
 
 	unordered_map<int, Group *> map; // key: astronaut #, value: Group object
 	unordered_set<Group *> root_group_set; // set of all groups which have no parent group
-	int num_of_known_astros = 0;
+	long num_of_known_astros = 0;
 	for (int i = 0; i < pairs.size(); i++) {
-		vector<int> astro(pairs[i]);
+		vector<long> astro(pairs[i]);
 
 		int map_size = map.size();
 		bool is_new_astro_1 = false;
@@ -89,17 +86,17 @@ int comp(int total_astros, vector<vector<int>> pairs) {
 		}
 	}
 	
-	int unknown_astro_size = total_astros - num_of_known_astros; // the number of astronauts where the group is unknown
-	int num_root_groups = root_group_set.size();
-	vector<int> root_group_size(num_root_groups);
-	int i = 0;
+	long unknown_astro_size = total_astros - num_of_known_astros; // the number of astronauts where the group is unknown
+	long num_root_groups = root_group_set.size();
+	vector<long> root_group_size(num_root_groups);
+	long i = 0;
 	for (auto itr = root_group_set.begin(); itr != root_group_set.end(); ++itr) {
 		root_group_size[i++] = ((*itr)->size);
 	}
 	
-	int num_of_combinations = 0;
+	long num_of_combinations = 0;
 	for (i = 0; i < num_root_groups; i++) {
-		for (int j = i + 1; j < num_root_groups; j++) {
+		for (long j = i + 1; j < num_root_groups; j++) {
 			num_of_combinations += root_group_size[i] * root_group_size[j];
 		}
 		num_of_combinations += root_group_size[i] * unknown_astro_size;
@@ -111,11 +108,11 @@ int comp(int total_astros, vector<vector<int>> pairs) {
 }
 
 int main() {
-	int n, p;
+	long n, p;
 	cin >> n;
 	cin >> p;
-	vector<vector<int>> v;
-	int x, y;
+	vector<vector<long>> v;
+	long x, y;
 	for (int i = 0; i < p; i++) {
 		x = 0; y = 0;
 		cin >> x;
