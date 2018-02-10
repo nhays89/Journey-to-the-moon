@@ -5,20 +5,20 @@
 #include <unordered_set>
 using namespace std;
 /*
-A group is a related set of astronauts that are from 
-the same country of origin. 
+A group is a related set of astronauts that are from
+the same country of origin.
 An astronaut may have a direct parent group, and then
 later be merged with another known group that is from the
 same country of origin with a new root group. It will retain
-the original parent group. 
+the original parent group.
 
 For instance, example input:
-53 
+53
 01
 23
 12
 
-The astronauts, 0 and 1, are added to the map under the same group, A. 
+The astronauts, 0 and 1, are added to the map under the same group, A.
 
  A
 / \
@@ -35,8 +35,8 @@ Astronauts 2 and 3, are added the map under the same group, B.
 
 Astronauts 1 and 2 already exist, but each belongs to a different 'root' group, namely A and B.
 So, a new group, C, is created, and both A and B point to the new root group C.
- 
-    C
+
+	C
   /   \
  A     B
 / \   / \
@@ -48,25 +48,17 @@ typedef struct group {
 	struct group *parent;
 } Group;
 
+
 /*
+Calculates the number of unique pairwise combinations of astronauts.
+
 @total_astros - the total number of astronauts for the sample case.
-@pairs - input list of astronaut pairs.
-@return - an integer denoting the total number of pairwise combinations of astronauts belonging to different countries.
-
-Traverses through a list of pairs of astronauts known to belong to the same country. Using
-transitive reduction via common root groups, groups of astronauts are formed and merged 
-building larger groups to represent the growing number of astronauts for each country.
-Each astronaut can belong to many parent groups, but only one of which is the root parent group.
-The root of which is the country origin for that astronaut.
-
-An unordered_map stores data about each astronauts group(s), and an unordered_set stores data
-on all root groups. Once all groups are created, the set will be iterated over to access the count 
-of each root group.A sum of all pairwise combinations of counts is then calculated for known groups 
-follwed by a sum of all pairwise combinations of unknown groups. 
-These totals are added and returned.
-
+@num_of_known_astros - the total number of astronauts who belong to a group.
+@root_group_set - set of root astronaut groups
+@return - an integer denoting the total number of unique pairwise combinations of astronauts.
 
 */
+
 long int get_combinations(int total_astros, int num_of_known_astros, unordered_set<Group *> & root_group_set) {
 	int unknown_astro_size = total_astros - num_of_known_astros; // the number of astronauts where the group is unknown
 	int num_root_groups = root_group_set.size();
@@ -88,7 +80,23 @@ long int get_combinations(int total_astros, int num_of_known_astros, unordered_s
 }
 
 
+/*
+@total_astros - the total number of astronauts for the sample case.
+@pairs - input list of astronaut pairs.
+@return - an integer denoting the total number of pairwise combinations of astronauts belonging to different countries.
 
+Traverses through a list of pairs of astronauts known to belong to the same country. Using
+transitive reduction via common root groups, groups of astronauts are formed and merged
+building larger groups to represent the growing number of astronauts for each country.
+Each astronaut can belong to many parent groups, but only one of which is the root parent group.
+The root of which is the country origin for that astronaut.
+
+An unordered_map stores data about each astronauts group(s), and an unordered_set stores data
+on all root groups. Once all groups are created, the set will be iterated over to access the count
+of each root group.A sum of all pairwise combinations of counts is then calculated for known groups
+followed by a sum of all pairwise combinations of unknown groups.
+These totals are added and returned.
+*/
 long int comp(int total_astros, vector<vector<int>> & pairs) {
 
 	unordered_map<int, Group *> map; // key: astronaut #, value: Group object
@@ -195,7 +203,5 @@ int main() {
 		v.push_back({x, y});
 	}
 	cout << comp(n,  v);
-
-
 	return 0;
 }
