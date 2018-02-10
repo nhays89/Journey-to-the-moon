@@ -67,8 +67,29 @@ These totals are added and returned.
 
 
 */
+long int get_combinations(int total_astros, int num_of_known_astros, unordered_set<Group *> & root_group_set) {
+	int unknown_astro_size = total_astros - num_of_known_astros; // the number of astronauts where the group is unknown
+	int num_root_groups = root_group_set.size();
+	vector<int> root_group_size(num_root_groups);
+	int i = 0;
+	for (auto itr = root_group_set.begin(); itr != root_group_set.end(); ++itr) {
+		root_group_size[i++] = ((*itr)->size);
+	}
 
-long int comp(int total_astros, vector<vector<int>> pairs) {
+	long int num_of_combinations = 0;
+	for (i = 0; i < num_root_groups; i++) {
+		for (int j = i + 1; j < num_root_groups; j++) {
+			num_of_combinations += root_group_size[i] * root_group_size[j];
+		}
+		num_of_combinations += root_group_size[i] * unknown_astro_size;
+	}
+	num_of_combinations += (long int)unknown_astro_size * (unknown_astro_size - 1) / 2;
+	return num_of_combinations;
+}
+
+
+
+long int comp(int total_astros, vector<vector<int>> & pairs) {
 
 	unordered_map<int, Group *> map; // key: astronaut #, value: Group object
 	unordered_set<Group *> root_group_set; // set of all groups which have no parent group
@@ -144,23 +165,7 @@ long int comp(int total_astros, vector<vector<int>> pairs) {
 		}
 	}
 
-	int unknown_astro_size = total_astros - num_of_known_astros; // the number of astronauts where the group is unknown
-	int num_root_groups = root_group_set.size();
-	vector<int> root_group_size(num_root_groups);
-	int i = 0;
-	for (auto itr = root_group_set.begin(); itr != root_group_set.end(); ++itr) {
-		root_group_size[i++] = ((*itr)->size);
-	}
-	
-	long int num_of_combinations = 0;
-	for (i = 0; i < num_root_groups; i++) {
-		for (int j = i + 1; j < num_root_groups; j++) {
-			num_of_combinations += root_group_size[i] * root_group_size[j];
-		}
-		num_of_combinations += root_group_size[i] * unknown_astro_size;
-	}
-    num_of_combinations += (long int) unknown_astro_size * (unknown_astro_size - 1) / 2;
-	return num_of_combinations;
+	return get_combinations(total_astros, num_of_known_astros, root_group_set);
 }
 
 /*
