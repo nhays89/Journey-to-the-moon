@@ -36,7 +36,7 @@ Astronauts 2 and 3, are added the map under the same group, B.
 Astronauts 1 and 2 already exist, but each belongs to a different 'root' group, namely A and B.
 So, a new group, C, is created, and both A and B point to the new root group C.
 
-	C
+    C
   /   \
  A     B
 / \   / \
